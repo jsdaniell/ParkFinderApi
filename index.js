@@ -11,6 +11,10 @@ app.use(cors())
 
 app.use(logMiddleware);
 
+app.use("/", (req, res) => {
+    res.send("Received");
+})
+
 app.use("/spaces", spacesRoutes);
 app.use("/auth", authRoutes);
 

@@ -17,4 +17,14 @@ router.delete('/:id', (req, res) => {
     res.send('DELETE /spaces/:id');
 })
 
+router.post('/:id/fill-in', (req, res) => {
+  // preencher vaga
+  res.send('POST /spaces/:id/fill-in');
+})
+
+router.post('/:id/fill-out', (req, res) => {
+  // desocupar vaga
+  res.send('POST /spaces/:id/fill-out');
+})
+
 export default router;
