@@ -2,7 +2,7 @@ import { query } from "../config/db.js";
 import { differenceInMinutes } from "date-fns";
 
 const VALUE_HOUR = 10;
-const LIMIT_HOUR = 1;
+const LIMIT_MINUTES = 60;
 const FRACTION_MINUTES = 15;
 const VALUE_FRACTION = 3;
 
@@ -42,18 +42,30 @@ const SpacesRepository = {
         return result.rows[0];
     },
     async getPriceOfExit(id) {
-        // const text = 'SELECT lastEntry FROM spaces WHERE id = $1';
-        // const values = [id];
+        const text = 'SELECT lastEntry FROM spaces WHERE id = $1';
+        const values = [id];
+        const result = await query(text, values);
 
-        // const result = await query(text, values);
+        let lastEntry = result.rows[0].lastentry;
+        let now = new Date();
 
-        // let lastEntry = result.rows[0].lastentry;
+        let minutesPassed = Math.abs(differenceInMinutes(now, lastEntry));
 
-        let lastEntry = new Date(2024, 10, 11, 18, 0, 0);
+        let finalValue = 0
 
-       
+        if(minutesPassed > LIMIT_MINUTES){
+            finalValue = VALUE_HOUR + (minutesPassed - 60) / FRACTION_MINUTES * VALUE_FRACTION
+        } else {
+            finalValue = VALUE_HOUR
+        }
 
-        return price;
+        return finalValue.toFixed(2);
+    },
+    async exitSpace(id) {
+        const text = 'UPDATE spaces SET lastEntry = null, occuped = false WHERE id = $1 RETURNING *';
+        const values = [id];
+        const result = await query(text, values);
+        return result.rows[0];
     }
 }
 
