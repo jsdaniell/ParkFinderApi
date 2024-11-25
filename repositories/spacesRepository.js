@@ -10,6 +10,7 @@ const SpacesRepository = {
     async getSpaces() {
         const text = 'SELECT * FROM spaces';
         const result = await query(text);
+        console.info(result.rows);
         return result.rows;
     },
     async getSpaceById(id) {
@@ -35,9 +36,9 @@ const SpacesRepository = {
         const values = [id];
         await query(text, values);
     },
-    async markEntry(id) {
-        const text = 'UPDATE spaces SET lastEntry = NOW(), occuped = true WHERE id = $1 RETURNING *';
-        const values = [id];
+    async markEntry(id, plate) {
+        const text = 'UPDATE spaces SET lastEntry = NOW(), occuped = true, plate = $2 WHERE id = $1 RETURNING *';
+        const values = [id, plate];
         const result = await query(text, values);
         return result.rows[0];
     },

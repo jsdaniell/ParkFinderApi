@@ -28,7 +28,8 @@ const SpacesController = {
     },
     async markEntry(req, res) {
         const id = req.params.id;
-        const updatedSpace = await SpacesRepository.markEntry(id);
+        const plate = req.body.plate;
+        const updatedSpace = await SpacesRepository.markEntry(id, plate);
         res.send(updatedSpace);
     },
     async getPriceOfExit(req, res) {
